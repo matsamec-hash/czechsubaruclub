@@ -4,7 +4,7 @@
     "name": "Impreza",
     "nameFull": "Subaru Impreza",
     "wikipediaEnTitle": "Subaru_Impreza",
-    "wikidataQid": "Q834945",
+    "wikidataQid": "Q391342",
     "category": "sedan",
     "productionStart": 1992
   },
@@ -13,7 +13,7 @@
     "name": "WRX",
     "nameFull": "Subaru WRX",
     "wikipediaEnTitle": "Subaru_WRX",
-    "wikidataQid": "Q1751980",
+    "wikidataQid": "Q117084952",
     "category": "sedan",
     "productionStart": 2014
   },
@@ -22,7 +22,7 @@
     "name": "WRX STI",
     "nameFull": "Subaru WRX STI",
     "wikipediaEnTitle": "Subaru_WRX_STI",
-    "wikidataQid": "Q1751987",
+    "wikidataQid": "Q90920810",
     "category": "sedan",
     "productionStart": 1994
   },
@@ -31,7 +31,7 @@
     "name": "Forester",
     "nameFull": "Subaru Forester",
     "wikipediaEnTitle": "Subaru_Forester",
-    "wikidataQid": "Q834907",
+    "wikidataQid": "Q1324599",
     "category": "suv",
     "productionStart": 1997
   },
@@ -40,7 +40,7 @@
     "name": "Outback",
     "nameFull": "Subaru Outback",
     "wikipediaEnTitle": "Subaru_Outback",
-    "wikidataQid": "Q834916",
+    "wikidataQid": "Q1536958",
     "category": "wagon",
     "productionStart": 1994
   },
@@ -49,7 +49,7 @@
     "name": "Legacy",
     "nameFull": "Subaru Legacy",
     "wikipediaEnTitle": "Subaru_Legacy",
-    "wikidataQid": "Q1142251",
+    "wikidataQid": "Q603323",
     "category": "sedan",
     "productionStart": 1989
   },
@@ -58,7 +58,7 @@
     "name": "BRZ",
     "nameFull": "Subaru BRZ",
     "wikipediaEnTitle": "Subaru_BRZ",
-    "wikidataQid": "Q908543",
+    "wikidataQid": "Q3502403",
     "category": "coupe",
     "productionStart": 2012
   },
@@ -67,7 +67,7 @@
     "name": "Levorg",
     "nameFull": "Subaru Levorg",
     "wikipediaEnTitle": "Subaru_Levorg",
-    "wikidataQid": "Q15994830",
+    "wikidataQid": "Q16867829",
     "category": "wagon",
     "productionStart": 2014
   },
@@ -76,7 +76,7 @@
     "name": "XV",
     "nameFull": "Subaru XV (Crosstrek)",
     "wikipediaEnTitle": "Subaru_Crosstrek",
-    "wikidataQid": "Q907578",
+    "wikidataQid": "Q2119417",
     "category": "suv",
     "productionStart": 2011
   },
@@ -85,7 +85,7 @@
     "name": "SVX",
     "nameFull": "Subaru SVX",
     "wikipediaEnTitle": "Subaru_SVX",
-    "wikidataQid": "Q1142306",
+    "wikidataQid": "Q609454",
     "category": "coupe",
     "productionStart": 1991,
     "productionEnd": 1996
@@ -95,7 +95,7 @@
     "name": "Justy",
     "nameFull": "Subaru Justy",
     "wikipediaEnTitle": "Subaru_Justy",
-    "wikidataQid": "Q1142242",
+    "wikidataQid": "Q265163",
     "category": "hatchback",
     "productionStart": 1984
   },
@@ -104,7 +104,7 @@
     "name": "Tribeca",
     "nameFull": "Subaru Tribeca",
     "wikipediaEnTitle": "Subaru_Tribeca",
-    "wikidataQid": "Q834929",
+    "wikidataQid": "Q1421437",
     "category": "suv",
     "productionStart": 2005,
     "productionEnd": 2014
@@ -114,7 +114,7 @@
     "name": "Alcyone",
     "nameFull": "Subaru Alcyone (XT)",
     "wikipediaEnTitle": "Subaru_XT",
-    "wikidataQid": "Q1142276",
+    "wikidataQid": "Q542757",
     "category": "coupe",
     "productionStart": 1985,
     "productionEnd": 1991
@@ -124,7 +124,7 @@
     "name": "Vivio",
     "nameFull": "Subaru Vivio",
     "wikipediaEnTitle": "Subaru_Vivio",
-    "wikidataQid": "Q1370022",
+    "wikidataQid": "Q1935821",
     "category": "kei",
     "productionStart": 1992,
     "productionEnd": 1998
@@ -134,7 +134,7 @@
     "name": "R1",
     "nameFull": "Subaru R1",
     "wikipediaEnTitle": "Subaru_R1",
-    "wikidataQid": "Q1142279",
+    "wikidataQid": "Q1896813",
     "category": "kei",
     "productionStart": 2005,
     "productionEnd": 2010
@@ -144,7 +144,7 @@
     "name": "R2",
     "nameFull": "Subaru R2",
     "wikipediaEnTitle": "Subaru_R2",
-    "wikidataQid": "Q1142282",
+    "wikidataQid": "Q2121857",
     "category": "kei",
     "productionStart": 2003,
     "productionEnd": 2010
@@ -154,7 +154,7 @@
     "name": "Stella",
     "nameFull": "Subaru Stella",
     "wikipediaEnTitle": "Subaru_Stella",
-    "wikidataQid": "Q1142284",
+    "wikidataQid": "Q1858626",
     "category": "kei",
     "productionStart": 2006
   },
@@ -163,7 +163,7 @@
     "name": "Pleo",
     "nameFull": "Subaru Pleo",
     "wikipediaEnTitle": "Subaru_Pleo",
-    "wikidataQid": "Q1142269",
+    "wikidataQid": "Q769999",
     "category": "kei",
     "productionStart": 1998
   },
@@ -172,7 +172,7 @@
     "name": "Sambar",
     "nameFull": "Subaru Sambar",
     "wikipediaEnTitle": "Subaru_Sambar",
-    "wikidataQid": "Q1142285",
+    "wikidataQid": "Q11084078",
     "category": "kei",
     "productionStart": 1961
   },
@@ -181,7 +181,7 @@
     "name": "Domingo",
     "nameFull": "Subaru Domingo (Libero)",
     "wikipediaEnTitle": "Subaru_Domingo",
-    "wikidataQid": "Q1142244",
+    "wikidataQid": "Q1634806",
     "category": "minivan",
     "productionStart": 1983,
     "productionEnd": 1998
@@ -191,7 +191,7 @@
     "name": "Trezia",
     "nameFull": "Subaru Trezia",
     "wikipediaEnTitle": "Subaru_Trezia",
-    "wikidataQid": "Q1142298",
+    "wikidataQid": "Q2361548",
     "category": "hatchback",
     "productionStart": 2010,
     "productionEnd": 2016
@@ -201,7 +201,7 @@
     "name": "Dex",
     "nameFull": "Subaru Dex",
     "wikipediaEnTitle": "Subaru_Dex",
-    "wikidataQid": "Q1142243",
+    "wikidataQid": "Q3502408",
     "category": "hatchback",
     "productionStart": 2008,
     "productionEnd": 2011
@@ -211,7 +211,7 @@
     "name": "Exiga",
     "nameFull": "Subaru Exiga",
     "wikipediaEnTitle": "Subaru_Exiga",
-    "wikidataQid": "Q1142246",
+    "wikidataQid": "Q514841",
     "category": "minivan",
     "productionStart": 2008,
     "productionEnd": 2018
@@ -221,7 +221,7 @@
     "name": "Baja",
     "nameFull": "Subaru Baja",
     "wikipediaEnTitle": "Subaru_Baja",
-    "wikidataQid": "Q1142241",
+    "wikidataQid": "Q1425161",
     "category": "pickup",
     "productionStart": 2003,
     "productionEnd": 2006
@@ -231,7 +231,7 @@
     "name": "B9 Tribeca",
     "nameFull": "Subaru B9 Tribeca",
     "wikipediaEnTitle": "Subaru_Tribeca",
-    "wikidataQid": "Q834929",
+    "wikidataQid": "Q1421437",
     "category": "suv",
     "productionStart": 2005,
     "productionEnd": 2007
@@ -241,7 +241,7 @@
     "name": "Ascent",
     "nameFull": "Subaru Ascent",
     "wikipediaEnTitle": "Subaru_Ascent",
-    "wikidataQid": "Q49213283",
+    "wikidataQid": "Q48799438",
     "category": "suv",
     "productionStart": 2018
   },
@@ -250,7 +250,7 @@
     "name": "Rex",
     "nameFull": "Subaru Rex",
     "wikipediaEnTitle": "Subaru_Rex",
-    "wikidataQid": "Q1142270",
+    "wikidataQid": "Q1891175",
     "category": "kei",
     "productionStart": 1972,
     "productionEnd": 1992
