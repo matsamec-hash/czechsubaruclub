@@ -94,13 +94,7 @@ export function ModelsCatalog({ models }: { models: Model[] }) {
         {filtered.map((m) => (
           <a
             key={m.slug}
-            href={
-              m.wikidataQid
-                ? `https://www.wikidata.org/wiki/${m.wikidataQid}`
-                : "#"
-            }
-            target="_blank"
-            rel="noreferrer"
+            href={`/modely/${m.slug}`}
             className="relative block aspect-[4/5] overflow-hidden rounded bg-[#131316] group"
           >
             {m.heroImageUrl && (

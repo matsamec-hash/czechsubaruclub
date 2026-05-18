@@ -782,11 +782,7 @@ function BentoCard({
 
   return (
     <a
-      href={
-        m.wikidataQid ? `https://www.wikidata.org/wiki/${m.wikidataQid}` : "#"
-      }
-      target="_blank"
-      rel="noreferrer"
+      href={`/modely/${m.slug}`}
       className={`relative block overflow-hidden rounded bg-[#131316] group ${sizeClass}`}
     >
       {m.heroImageUrl && (
