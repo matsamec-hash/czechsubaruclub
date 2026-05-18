@@ -238,7 +238,25 @@ export default async function HomePage() {
       />
 
       {/* === HERO === */}
-      <section className="mx-auto max-w-7xl px-8 pt-32 pb-40">
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={wrxSti?.heroImageUrl ?? undefined}
+            className="absolute inset-0 w-full h-full object-cover opacity-50"
+          >
+            <source
+              src="https://videos.pexels.com/video-files/16768844/16768844-hd_1280_720_60fps.mp4"
+              type="video/mp4"
+            />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0c]/40 via-[#0a0a0c]/70 to-[#0a0a0c]" />
+        </div>
+        <div className="mx-auto max-w-7xl px-8 pt-32 pb-40 relative">
         <div className="reveal in">
           <div className="inline-flex items-center gap-2 text-[12px] text-white/60 font-medium mb-10">
             <span
@@ -305,6 +323,7 @@ export default async function HomePage() {
             <div className="text-[12px] text-white/40 mt-2">WRC titulů</div>
           </div>
         </Reveal>
+        </div>
       </section>
 
       {/* === ROZCESTNÍK === */}
