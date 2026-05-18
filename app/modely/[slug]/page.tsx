@@ -5,6 +5,7 @@ import { db, schema } from "@/lib/db";
 import { eq } from "drizzle-orm";
 
 export const revalidate = 86400; // 24h
+export const dynamicParams = true; // allow on-demand SSR for slugs not in generateStaticParams
 
 const CATEGORY_LABEL: Record<string, string> = {
   sedan: "Sedan",
@@ -35,8 +36,12 @@ async function fetchModel(slug: string) {
       .from(schema.models)
       .where(eq(schema.models.slug, slug))
       .limit(1);
+    if (rows.length === 0) {
+      console.log(`[fetchModel] slug=${slug} not found in DB`);
+    }
     return rows[0] ?? null;
-  } catch {
+  } catch (err) {
+    console.error(`[fetchModel] slug=${slug} failed:`, err);
     return null;
   }
 }
@@ -64,8 +69,10 @@ export async function generateStaticParams() {
     const rows = await db
       .select({ slug: schema.models.slug })
       .from(schema.models);
+    console.log(`[generateStaticParams] /modely: ${rows.length} slugs`);
     return rows.map((r) => ({ slug: r.slug }));
-  } catch {
+  } catch (err) {
+    console.error("[generateStaticParams] /modely failed:", err);
     return [];
   }
 }
