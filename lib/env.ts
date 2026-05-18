@@ -8,6 +8,7 @@ const envSchema = z.object({
   SUPABASE_SERVICE_KEY: z.string().min(1).optional(),
   WIKIPEDIA_USER_AGENT: z.string().default("czechsubaruclub.cz pipeline"),
   NEXT_PUBLIC_GA_ID: z.string().default(""),
+  NEXT_PUBLIC_GSC_VERIFY: z.string().default(""),
   NEXT_PUBLIC_ADSENSE_CLIENT_ID: z.string().default(""),
 });
 
@@ -19,5 +20,6 @@ export const env = envSchema.parse({
   SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY,
   WIKIPEDIA_USER_AGENT: process.env.WIKIPEDIA_USER_AGENT,
   NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
+  NEXT_PUBLIC_GSC_VERIFY: process.env.NEXT_PUBLIC_GSC_VERIFY,
   NEXT_PUBLIC_ADSENSE_CLIENT_ID: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID,
 });

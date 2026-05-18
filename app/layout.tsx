@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "./(components)/SiteHeader";
 import { Footer } from "./(components)/Footer";
+import { CookieConsent } from "./(components)/CookieConsent";
+import { Analytics } from "./(components)/Analytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://czechsubaruclub.cz"),
@@ -37,16 +39,13 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "cs_CZ",
     url: "https://czechsubaruclub.cz",
     siteName: "Czech Subaru Club",
-    title:
-      "Czech Subaru Club — Encyklopedie všech Subaru",
+    title: "Czech Subaru Club — Encyklopedie všech Subaru",
     description:
       "Kompletní česká encyklopedie všech modelů Subaru od roku 1958. Boxer motory, symetrický 4×4, rally heritage.",
     images: [
@@ -76,10 +75,11 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GSC_VERIFY,
+  },
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-    ],
+    icon: [{ url: "/favicon.ico" }],
   },
   category: "automotive",
 };
@@ -102,9 +102,19 @@ export default function RootLayout({
         />
       </head>
       <body className="flex flex-col min-h-screen">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[300] focus:px-3 focus:py-2 focus:bg-[#4a8dff] focus:text-white focus:rounded focus:text-sm focus:font-medium"
+        >
+          Přeskočit na obsah
+        </a>
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
         <Footer />
+        <CookieConsent />
+        <Analytics />
       </body>
     </html>
   );
