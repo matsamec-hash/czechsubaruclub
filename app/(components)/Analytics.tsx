@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { env } from "@/lib/env";
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
 
 declare global {
   interface Window {
@@ -46,11 +47,11 @@ function loadGA4(gaId: string) {
 
 export function Analytics() {
   useEffect(() => {
-    if (!env.NEXT_PUBLIC_GA_ID) return;
-    if (hasConsent()) loadGA4(env.NEXT_PUBLIC_GA_ID);
+    if (!GA_ID) return;
+    if (hasConsent()) loadGA4(GA_ID);
     const listener = (e: Event) => {
       const detail = (e as CustomEvent<{ analytics: boolean }>).detail;
-      if (detail?.analytics) loadGA4(env.NEXT_PUBLIC_GA_ID);
+      if (detail?.analytics) loadGA4(GA_ID);
     };
     window.addEventListener("csc-consent-change", listener);
     return () => window.removeEventListener("csc-consent-change", listener);
