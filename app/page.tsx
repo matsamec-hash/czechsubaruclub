@@ -238,7 +238,7 @@ export default async function HomePage() {
       />
 
       {/* === HERO === */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden isolate">
         <div className="absolute inset-0 -z-10">
           <video
             autoPlay
