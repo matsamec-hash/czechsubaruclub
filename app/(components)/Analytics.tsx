@@ -34,9 +34,14 @@ function loadGA4(gaId: string) {
   document.head.appendChild(s);
 
   window.dataLayer = window.dataLayer || [];
-  const gtag = (...args: unknown[]) => {
-    window.dataLayer!.push(args);
-  };
+  // gtag.js only reads the `arguments` object — pushing a spread Array is
+  // silently ignored, so `config` never runs and GA4 records nothing. An arrow
+  // function has no `arguments`, so this must be a regular function.
+  function gtag(...args: unknown[]) {
+    void args;
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer!.push(arguments);
+  }
   window.gtag = gtag;
   gtag("js", new Date());
   gtag("config", gaId, {
