@@ -102,6 +102,25 @@ export function Footer() {
         <span>
           © {new Date().getFullYear()} Samec Digital s.r.o. · IČO 29547539
         </span>
+        <span className="flex items-center gap-3">
+          <span>Partneři:</span>
+          <a
+            href="https://samecdigital.com"
+            target="_blank"
+            rel="noopener"
+            className="hover:text-white transition"
+          >
+            Samec Digital
+          </a>
+          <a
+            href="https://agro-svet.cz"
+            target="_blank"
+            rel="noopener"
+            className="hover:text-white transition"
+          >
+            agro-svět.cz
+          </a>
+        </span>
         <span>Made with Boxer ❤ in Czechia</span>
       </div>
     </footer>
