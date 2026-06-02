@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { db, schema } from "@/lib/db";
 import { ModelsCatalog } from "../(components)/ModelsCatalog";
 
-export const revalidate = 3600;
-
 export const metadata: Metadata = {
   title: "Modely Subaru — kompletní katalog",
   description:

@@ -1,0 +1,22 @@
+# Static export served by Apache (Hostinger). Copied verbatim into out/ by `next build`.
+
+# Serve the build-time 404 page for missing routes.
+ErrorDocument 404 /404.html
+
+# The OG image route emits an extensionless file `opengraph-image` (PNG).
+<Files "opengraph-image">
+  ForceType image/png
+</Files>
+
+# Long-cache immutable build assets (hashed filenames).
+<IfModule mod_expires.c>
+  ExpiresActive On
+  <FilesMatch "\.(js|css|woff2?|png|jpg|jpeg|webp|svg|ico)$">
+    ExpiresDefault "access plus 1 year"
+  </FilesMatch>
+</IfModule>
+<IfModule mod_headers.c>
+  <FilesMatch "/_next/static/">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

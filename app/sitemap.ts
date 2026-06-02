@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { db, schema } from "@/lib/db";
 
+// Static export: emit sitemap.xml at build time.
+export const dynamic = "force-static";
+
 const BASE = "https://czechsubaruclub.cz";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

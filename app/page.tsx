@@ -3,8 +3,6 @@ import { ModelsCatalog } from "./(components)/ModelsCatalog";
 import { CountUp } from "./(components)/CountUp";
 import { Reveal } from "./(components)/Reveal";
 
-export const revalidate = 3600;
-
 const HISTORY = [
   {
     year: 1917,

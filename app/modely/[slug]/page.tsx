@@ -4,8 +4,7 @@ import { notFound } from "next/navigation";
 import { db, schema } from "@/lib/db";
 import { eq } from "drizzle-orm";
 
-export const revalidate = 86400; // 24h
-export const dynamicParams = true; // allow on-demand SSR for slugs not in generateStaticParams
+export const dynamicParams = false; // static export: only slugs from generateStaticParams are emitted
 
 const CATEGORY_LABEL: Record<string, string> = {
   sedan: "Sedan",

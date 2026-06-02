@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+// Static export: generate the OG image once at build time (no edge runtime).
+export const dynamic = "force-static";
 export const alt = "Czech Subaru Club — Encyklopedie všech Subaru";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
