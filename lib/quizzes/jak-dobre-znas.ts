@@ -1,0 +1,92 @@
+import { knowledgeQuizSchema, type KnowledgeQuiz } from "./types";
+
+const def = {
+  kind: "knowledge",
+  slug: "jak-dobre-znas-subaru",
+  title: "Jak dobře znáš Subaru?",
+  intro: "Deset otázek z historie, techniky i legend značky. Zvládneš plný počet?",
+  questions: [
+    { id: "boxer", text: "Co znamená „boxer\" u motoru Subaru?",
+      answers: [
+        { id: "boxer-a", text: "Válce uspořádané do V" },
+        { id: "boxer-b", text: "Válce leží vodorovně proti sobě" },
+        { id: "boxer-c", text: "Válce v jedné řadě za sebou" },
+        { id: "boxer-d", text: "Válce do hvězdy" },
+      ], correctId: "boxer-b",
+      explanation: "Protilehlé písty „boxují\" proti sobě. Plochá konstrukce dává nízké těžiště a typický zvuk." },
+    { id: "awd", text: "Jak se jmenuje pohon všech kol Subaru?",
+      answers: [
+        { id: "awd-a", text: "Quattro" },
+        { id: "awd-b", text: "xDrive" },
+        { id: "awd-c", text: "Symmetrical AWD" },
+        { id: "awd-d", text: "4Matic" },
+      ], correctId: "awd-c",
+      explanation: "Symetrický stálý pohon všech kol — souměrné rozložení hnacího ústrojí kolem osy vozu." },
+    { id: "wrc-rok", text: "Kdy získalo Subaru první titul mistra světa značek v rallye (WRC)?",
+      answers: [
+        { id: "wrc-a", text: "1990" },
+        { id: "wrc-b", text: "1993" },
+        { id: "wrc-c", text: "1995" },
+        { id: "wrc-d", text: "2001" },
+      ], correctId: "wrc-c",
+      explanation: "Subaru vyhrálo titul značek 1995, 1996 i 1997 s vozem Impreza 555." },
+    { id: "mcrae", text: "Který jezdec získal se Subaru titul mistra světa v rallye (1995) a zahynul 2007?",
+      answers: [
+        { id: "mcrae-a", text: "Colin McRae" },
+        { id: "mcrae-b", text: "Richard Burns" },
+        { id: "mcrae-c", text: "Petter Solberg" },
+        { id: "mcrae-d", text: "Tommi Mäkinen" },
+      ], correctId: "mcrae-a",
+      explanation: "Colin McRae — ikona značky. Mistr světa 1995, zahynul při havárii vrtulníku v roce 2007." },
+    { id: "ej20", text: "Co je „EJ20\"?",
+      answers: [
+        { id: "ej20-a", text: "Model Subaru z 80. let" },
+        { id: "ej20-b", text: "Legendární dvoulitrový boxer turbo motor" },
+        { id: "ej20-c", text: "Typ převodovky" },
+        { id: "ej20-d", text: "Závodní tým" },
+      ], correctId: "ej20-b",
+      explanation: "EJ20 = kultovní 2,0l boxer, srdce Imprezy WRX/STI po mnoho generací." },
+    { id: "rwd", text: "Který současný model Subaru je zadokolka (RWD), ne AWD?",
+      answers: [
+        { id: "rwd-a", text: "Impreza" },
+        { id: "rwd-b", text: "Forester" },
+        { id: "rwd-c", text: "BRZ" },
+        { id: "rwd-d", text: "Outback" },
+      ], correctId: "rwd-c",
+      explanation: "BRZ je výjimka — lehké sportovní kupé s pohonem zadních kol, vyvinuté s Toyotou (GR86)." },
+    { id: "sti", text: "Jak se jmenuje sportovní divize Subaru?",
+      answers: [
+        { id: "sti-a", text: "AMG" },
+        { id: "sti-b", text: "STI (Subaru Tecnica International)" },
+        { id: "sti-c", text: "Nismo" },
+        { id: "sti-d", text: "M Power" },
+      ], correctId: "sti-b",
+      explanation: "STI = Subaru Tecnica International, závodní a high-performance divize značky." },
+    { id: "zeme", text: "Z jaké země značka Subaru pochází?",
+      answers: [
+        { id: "zeme-a", text: "Německo" },
+        { id: "zeme-b", text: "Korea" },
+        { id: "zeme-c", text: "Japonsko" },
+        { id: "zeme-d", text: "USA" },
+      ], correctId: "zeme-c",
+      explanation: "Japonsko — Subaru je automobilová divize společnosti Subaru Corporation (dříve Fuji Heavy Industries)." },
+    { id: "logo", text: "Co znázorňuje šest hvězd v logu Subaru?",
+      answers: [
+        { id: "logo-a", text: "Souhvězdí Plejády" },
+        { id: "logo-b", text: "Šest zakladatelů firmy" },
+        { id: "logo-c", text: "Šest kontinentů" },
+        { id: "logo-d", text: "Velký vůz" },
+      ], correctId: "logo-a",
+      explanation: "„Subaru\" je japonský název hvězdokupy Plejády. Hvězdy odkazují na šest firem spojených do Fuji Heavy Industries." },
+    { id: "kei", text: "Který z těchto modelů je kultovní japonský kei car?",
+      answers: [
+        { id: "kei-a", text: "Outback" },
+        { id: "kei-b", text: "Legacy" },
+        { id: "kei-c", text: "Vivio" },
+        { id: "kei-d", text: "Tribeca" },
+      ], correctId: "kei-c",
+      explanation: "Vivio je drobný kei car — miniaturní třída japonských vozů s přísnými limity rozměrů a objemu motoru." },
+  ],
+} satisfies KnowledgeQuiz;
+
+export const jakDobreZnas: KnowledgeQuiz = knowledgeQuizSchema.parse(def);
