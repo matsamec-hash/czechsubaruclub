@@ -24,30 +24,37 @@ export function QuizModal() {
     }
     if (seen) return;
 
+    let triggered = false;
     function show() {
-      setOpen((already) => {
-        if (already) return already;
-        try {
-          localStorage.setItem(SEEN_KEY, "1");
-        } catch {
-          /* ignore */
-        }
-        track("quiz_modal_open");
-        return true;
-      });
+      if (triggered) return;
+      triggered = true;
+      try {
+        localStorage.setItem(SEEN_KEY, "1");
+      } catch {
+        /* ignore */
+      }
+      track("quiz_modal_open");
+      setOpen(true);
     }
 
     const timer = window.setTimeout(show, 8000);
-    function onExit(e: MouseEvent) {
-      if (e.clientY <= 0) show();
-    }
-    document.addEventListener("mouseout", onExit);
+    const root = document.documentElement;
+    root.addEventListener("mouseleave", show);
 
     return () => {
       window.clearTimeout(timer);
-      document.removeEventListener("mouseout", onExit);
+      root.removeEventListener("mouseleave", show);
     };
   }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   if (!open) return null;
 
@@ -72,6 +79,7 @@ export function QuizModal() {
         <button
           onClick={() => setOpen(false)}
           aria-label="Zavřít"
+          autoFocus
           className="absolute top-3 right-3 text-white/40 hover:text-white text-lg leading-none"
         >
           ✕
