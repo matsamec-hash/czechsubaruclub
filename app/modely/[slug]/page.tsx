@@ -228,6 +228,17 @@ export default async function ModelDetailPage({
         </div>
       </section>
 
+      {/* === HERO FOTO === */}
+      {m.heroImageUrl && (
+        <section className="mx-auto max-w-5xl px-8 -mt-16 mb-4 relative">
+          <img
+            src={m.heroImageUrl}
+            alt={m.nameFull}
+            className="w-full aspect-[16/9] object-cover rounded-xl border border-white/[0.08] shadow-2xl"
+          />
+        </section>
+      )}
+
       {/* === MAIN === */}
       <section className="mx-auto max-w-5xl px-8 pb-16">
         <div className="grid md:grid-cols-3 gap-12">
