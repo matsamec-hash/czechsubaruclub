@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { db, schema } from "@/lib/db";
+import { ktereSubaru } from "@/lib/quizzes";
 
 // Static export: emit sitemap.xml at build time.
 export const dynamic = "force-static";
@@ -31,5 +32,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // DB unavailable at build → return static routes only
   }
 
-  return [...staticRoutes, ...modelRoutes];
+  const quizRoutes: MetadataRoute.Sitemap = [
+    { url: `${BASE}/kviz`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7 },
+    { url: `${BASE}/kviz/ktere-subaru-se-k-tobe-hodi`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7 },
+    { url: `${BASE}/kviz/jak-dobre-znas-subaru`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7 },
+    ...ktereSubaru.outcomes.map((o) => ({
+      url: `${BASE}/kviz/ktere-subaru-se-k-tobe-hodi/vysledek/${o.modelSlug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
+  ];
+
+  return [...staticRoutes, ...quizRoutes, ...modelRoutes];
 }
