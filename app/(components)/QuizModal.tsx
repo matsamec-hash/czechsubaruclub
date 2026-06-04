@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const SEEN_KEY = "csc_quiz_modal_seen";
+const COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // max 1× za 30 dní
 
 function track(event: string) {
   if (typeof window !== "undefined") window.gtag?.("event", event, { quiz: "ktere-subaru-se-k-tobe-hodi" });
@@ -16,20 +17,23 @@ export function QuizModal() {
 
   useEffect(() => {
     if (pathname?.startsWith("/kviz")) return;
-    let seen = false;
+    let suppressed = false;
     try {
-      seen = localStorage.getItem(SEEN_KEY) === "1";
+      const raw = localStorage.getItem(SEEN_KEY);
+      const ts = raw ? Number(raw) : 0;
+      // Naposledy zobrazeno před méně než 30 dny → tentokrát ne.
+      suppressed = Number.isFinite(ts) && ts > 0 && Date.now() - ts < COOLDOWN_MS;
     } catch {
-      seen = true; // bez storage modal raději nezobrazuj
+      suppressed = true; // bez storage modal raději nezobrazuj
     }
-    if (seen) return;
+    if (suppressed) return;
 
     let triggered = false;
     function show() {
       if (triggered) return;
       triggered = true;
       try {
-        localStorage.setItem(SEEN_KEY, "1");
+        localStorage.setItem(SEEN_KEY, String(Date.now()));
       } catch {
         /* ignore */
       }
@@ -37,7 +41,7 @@ export function QuizModal() {
       setOpen(true);
     }
 
-    const timer = window.setTimeout(show, 8000);
+    const timer = window.setTimeout(show, 5000);
     const root = document.documentElement;
     root.addEventListener("mouseleave", show);
 

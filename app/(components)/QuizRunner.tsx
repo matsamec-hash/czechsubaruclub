@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { scorePersonality, scoreKnowledge } from "@/lib/quizzes/scoring";
 import type { Quiz } from "@/lib/quizzes/types";
@@ -57,19 +58,38 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      {/* tečkový progress */}
-      <div className="flex gap-1.5 mb-6">
-        {quiz.questions.map((q, i) => (
-          <span
-            key={q.id}
-            className={`h-1.5 flex-1 rounded-full transition-colors ${
-              i <= index ? "bg-[#4a8dff]" : "bg-white/10"
-            }`}
-          />
-        ))}
+      {/* tečkový progress + ukončení kvízu */}
+      <div className="flex items-center gap-4 mb-6">
+        <div className="flex gap-1.5 flex-1">
+          {quiz.questions.map((q, i) => (
+            <span
+              key={q.id}
+              className={`h-1.5 flex-1 rounded-full transition-colors ${
+                i <= index ? "bg-[#4a8dff]" : "bg-white/10"
+              }`}
+            />
+          ))}
+        </div>
+        <Link
+          href="/kviz"
+          aria-label="Ukončit kvíz"
+          className="shrink-0 text-white/40 hover:text-white text-lg leading-none transition"
+        >
+          ✕
+        </Link>
       </div>
-      <div className="text-[11px] uppercase tracking-[0.12em] text-white/40 mb-2">
-        Otázka {index + 1} / {total}
+      <div className="flex items-center gap-3 mb-2">
+        <div className="text-[11px] uppercase tracking-[0.12em] text-white/40">
+          Otázka {index + 1} / {total}
+        </div>
+        {index > 0 && (
+          <button
+            onClick={() => setIndex(index - 1)}
+            className="text-[11px] text-white/40 hover:text-white transition focus-visible:outline-none focus-visible:underline"
+          >
+            ← Zpět
+          </button>
+        )}
       </div>
       <h1 className="text-[clamp(20px,3vw,28px)] font-semibold tracking-tight text-white mb-8 leading-snug">
         {question.text}
