@@ -4,6 +4,7 @@ import { SiteHeader } from "./(components)/SiteHeader";
 import { Footer } from "./(components)/Footer";
 import { CookieConsent } from "./(components)/CookieConsent";
 import { Analytics } from "./(components)/Analytics";
+import { QuizModal } from "./(components)/QuizModal";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://czechsubaruclub.cz"),
@@ -120,6 +121,7 @@ export default function RootLayout({
         <Footer />
         <CookieConsent />
         <Analytics />
+        <QuizModal />
       </body>
     </html>
   );
