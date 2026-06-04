@@ -39,7 +39,7 @@ export default async function OG({ params }: { params: Promise<{ slug: string }>
         }}
       >
         <div style={{ fontSize: 30, color: "#4a8dff", letterSpacing: 2 }}>
-          {outcome?.emoji ?? "🚗"} {(outcome?.archetype ?? "Výsledek kvízu").toUpperCase()}
+          {`${outcome?.emoji ?? "🚗"} ${(outcome?.archetype ?? "Výsledek kvízu").toUpperCase()}`}
         </div>
         <div style={{ fontSize: 34, color: "#a1a1a8", marginTop: 24 }}>
           Tvé Subaru je
