@@ -5,6 +5,8 @@ import { ktereSubaru } from "@/lib/quizzes";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+export const dynamic = "force-static";
+export const alt = "Výsledek kvízu: Které Subaru se k tobě hodí?";
 
 export function generateStaticParams() {
   return ktereSubaru.outcomes.map((o) => ({ slug: o.modelSlug }));
