@@ -2,6 +2,7 @@ import { db, schema } from "@/lib/db";
 import { ModelsCatalog } from "./(components)/ModelsCatalog";
 import { CountUp } from "./(components)/CountUp";
 import { Reveal } from "./(components)/Reveal";
+import { HomeQuizBlock } from "./(components)/HomeQuizBlock";
 
 const HISTORY = [
   {
@@ -323,6 +324,8 @@ export default async function HomePage() {
         </Reveal>
         </div>
       </section>
+
+      <HomeQuizBlock />
 
       {/* === ROZCESTNÍK === */}
       <section className="pt-32">
