@@ -79,7 +79,7 @@ export function QuizRunner({ quiz }: { quiz: Quiz }) {
           <button
             key={a.id}
             onClick={() => pick(a.id)}
-            className="text-left rounded-xl border border-white/10 bg-[#16161b] px-4 py-4 hover:border-[#4a8dff] hover:bg-[#4a8dff]/10 transition focus:outline-none focus:border-[#4a8dff]"
+            className="text-left rounded-xl border border-white/10 bg-[#16161b] px-4 py-4 hover:border-[#4a8dff] hover:bg-[#4a8dff]/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a8dff]"
           >
             {"icon" in a && a.icon && <span className="block text-2xl mb-2">{a.icon}</span>}
             <span className="text-[14px] text-white/90">{a.text}</span>
@@ -105,7 +105,7 @@ function KnowledgeResult({
     score >= 6 ? "Slušný přehled. Pár chytáků tě dostalo." :
     score >= 3 ? "Základ máš, je co dohánět." :
     "Tady je prostor růst — projdi si odpovědi níž.";
-  const shareText = `Dal jsem ${score}/${total} v kvízu Jak dobře znáš Subaru — zvládneš víc?`;
+  const shareText = `Skóre ${score}/${total} v kvízu Jak dobře znáš Subaru — zvládneš víc?`;
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">

@@ -14,7 +14,8 @@ export function ShareButton({
   const [copied, setCopied] = useState(false);
 
   async function nativeOrCopy() {
-    if (typeof navigator !== "undefined" && navigator.share) {
+    if (typeof navigator === "undefined") return;
+    if (navigator.share) {
       try {
         await navigator.share({ title, text, url });
         return;
@@ -32,7 +33,7 @@ export function ShareButton({
   }
 
   const enc = encodeURIComponent;
-  const x = `https://twitter.com/intent/tweet?text=${enc(text)}&url=${enc(url)}`;
+  const x = `https://x.com/intent/tweet?text=${enc(text)}&url=${enc(url)}`;
   const fb = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`;
 
   const pill =
