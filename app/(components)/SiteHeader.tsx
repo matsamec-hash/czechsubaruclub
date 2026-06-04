@@ -17,6 +17,9 @@ export function SiteHeader() {
           <Link href="/modely" className="hover:text-white transition">
             Modely
           </Link>
+          <Link href="/kviz" className="hover:text-white transition">
+            Kvíz
+          </Link>
           <Link href="/#historie" className="hover:text-white transition">
             Historie
           </Link>
