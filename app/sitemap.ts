@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { db, schema } from "@/lib/db";
+import { listModels } from "@/lib/data/models";
 import { ktereSubaru } from "@/lib/quizzes";
 
 // Static export: emit sitemap.xml at build time.
@@ -17,20 +17,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/cookies`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
   ];
 
-  let modelRoutes: MetadataRoute.Sitemap = [];
-  try {
-    const models = await db
-      .select({ slug: schema.models.slug, updatedAt: schema.models.updatedAt })
-      .from(schema.models);
-    modelRoutes = models.map((m) => ({
-      url: `${BASE}/modely/${m.slug}`,
-      lastModified: m.updatedAt,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    }));
-  } catch {
-    // DB unavailable at build → return static routes only
-  }
+  const modelRoutes: MetadataRoute.Sitemap = listModels().map((m) => ({
+    url: `${BASE}/modely/${m.slug}`,
+    lastModified: new Date(m.updatedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
 
   const quizRoutes: MetadataRoute.Sitemap = [
     { url: `${BASE}/kviz`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7 },

@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { eq } from "drizzle-orm";
-import { db, schema } from "@/lib/db";
+import { getModel } from "@/lib/data/models";
 import { ktereSubaru } from "@/lib/quizzes";
 import { ShareButton } from "@/app/(components)/ShareButton";
 
@@ -13,12 +12,7 @@ function outcomeForSlug(slug: string) {
 }
 
 async function fetchModel(slug: string) {
-  const rows = await db
-    .select()
-    .from(schema.models)
-    .where(eq(schema.models.slug, slug))
-    .limit(1);
-  return rows[0] ?? null;
+  return getModel(slug);
 }
 
 export function generateStaticParams() {

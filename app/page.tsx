@@ -1,4 +1,4 @@
-import { db, schema } from "@/lib/db";
+import { listModels } from "@/lib/data/models";
 import { ModelsCatalog } from "./(components)/ModelsCatalog";
 import { CountUp } from "./(components)/CountUp";
 import { Reveal } from "./(components)/Reveal";
@@ -114,23 +114,16 @@ const organizationJsonLd = {
 };
 
 async function fetchModels() {
-  try {
-    return await db
-      .select({
-        slug: schema.models.slug,
-        name: schema.models.name,
-        nameFull: schema.models.nameFull,
-        category: schema.models.category,
-        productionStart: schema.models.productionStart,
-        productionEnd: schema.models.productionEnd,
-        heroImageUrl: schema.models.heroImageUrl,
-        wikidataQid: schema.models.wikidataQid,
-      })
-      .from(schema.models)
-      .orderBy(schema.models.slug);
-  } catch {
-    return [];
-  }
+  return listModels().map((m) => ({
+    slug: m.slug,
+    name: m.name,
+    nameFull: m.nameFull,
+    category: m.category,
+    productionStart: m.productionStart,
+    productionEnd: m.productionEnd,
+    heroImageUrl: m.heroImageUrl,
+    wikidataQid: m.wikidataQid,
+  }));
 }
 
 const FAKE_USERS = [

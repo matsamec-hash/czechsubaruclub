@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { db, schema } from "@/lib/db";
-import { eq } from "drizzle-orm";
+import { getModel, listModels } from "@/lib/data/models";
 
 export const dynamicParams = false; // static export: only slugs from generateStaticParams are emitted
 
@@ -29,51 +28,22 @@ const CATEGORY_BODY: Record<string, string> = {
 };
 
 async function fetchModel(slug: string) {
-  try {
-    const rows = await db
-      .select()
-      .from(schema.models)
-      .where(eq(schema.models.slug, slug))
-      .limit(1);
-    if (rows.length === 0) {
-      console.log(`[fetchModel] slug=${slug} not found in DB`);
-    }
-    return rows[0] ?? null;
-  } catch (err) {
-    console.error(`[fetchModel] slug=${slug} failed:`, err);
-    return null;
-  }
+  return getModel(slug);
 }
 
-async function fetchSiblings(currentSlug: string) {
-  try {
-    return await db
-      .select({
-        slug: schema.models.slug,
-        name: schema.models.name,
-        heroImageUrl: schema.models.heroImageUrl,
-        category: schema.models.category,
-        productionStart: schema.models.productionStart,
-        productionEnd: schema.models.productionEnd,
-      })
-      .from(schema.models)
-      .orderBy(schema.models.slug);
-  } catch {
-    return [];
-  }
+async function fetchSiblings(_currentSlug: string) {
+  return listModels().map((m) => ({
+    slug: m.slug,
+    name: m.name,
+    heroImageUrl: m.heroImageUrl,
+    category: m.category,
+    productionStart: m.productionStart,
+    productionEnd: m.productionEnd,
+  }));
 }
 
 export async function generateStaticParams() {
-  try {
-    const rows = await db
-      .select({ slug: schema.models.slug })
-      .from(schema.models);
-    console.log(`[generateStaticParams] /modely: ${rows.length} slugs`);
-    return rows.map((r) => ({ slug: r.slug }));
-  } catch (err) {
-    console.error("[generateStaticParams] /modely failed:", err);
-    return [];
-  }
+  return listModels().map((m) => ({ slug: m.slug }));
 }
 
 export async function generateMetadata({

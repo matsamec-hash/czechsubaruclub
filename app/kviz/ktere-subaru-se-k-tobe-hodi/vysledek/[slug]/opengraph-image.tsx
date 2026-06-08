@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
-import { eq } from "drizzle-orm";
-import { db, schema } from "@/lib/db";
+import { getModel } from "@/lib/data/models";
 import { ktereSubaru } from "@/lib/quizzes";
 
 export const size = { width: 1200, height: 630 };
@@ -15,12 +14,7 @@ export function generateStaticParams() {
 export default async function OG({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const outcome = ktereSubaru.outcomes.find((o) => o.modelSlug === slug);
-  const rows = await db
-    .select({ name: schema.models.name })
-    .from(schema.models)
-    .where(eq(schema.models.slug, slug))
-    .limit(1);
-  const name = rows[0]?.name ?? slug;
+  const name = getModel(slug)?.name ?? slug;
 
   return new ImageResponse(
     (

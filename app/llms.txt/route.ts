@@ -1,30 +1,22 @@
-import { db, schema } from "@/lib/db";
+import { listModels } from "@/lib/data/models";
 
 // Static export: rendered to a static `llms.txt` file at build time.
 export const dynamic = "force-static";
 
 export async function GET() {
-  let modelsBlock = "";
-  try {
-    const rows = await db
-      .select({
-        slug: schema.models.slug,
-        name: schema.models.nameFull,
-        category: schema.models.category,
-        start: schema.models.productionStart,
-        end: schema.models.productionEnd,
-      })
-      .from(schema.models)
-      .orderBy(schema.models.slug);
-    modelsBlock = rows
-      .map(
-        (m) =>
-          `- ${m.name} (${m.category}, ${m.start ?? "?"}${m.end ? `–${m.end}` : "–dosud"}): https://czechsubaruclub.cz/modely/${m.slug}`,
-      )
-      .join("\n");
-  } catch {
-    modelsBlock = "(DB unavailable at build time)";
-  }
+  const rows = listModels().map((m) => ({
+    slug: m.slug,
+    name: m.nameFull,
+    category: m.category,
+    start: m.productionStart,
+    end: m.productionEnd,
+  }));
+  const modelsBlock = rows
+    .map(
+      (m) =>
+        `- ${m.name} (${m.category}, ${m.start ?? "?"}${m.end ? `–${m.end}` : "–dosud"}): https://czechsubaruclub.cz/modely/${m.slug}`,
+    )
+    .join("\n");
 
   const body = `# Czech Subaru Club
 
