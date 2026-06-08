@@ -1,114 +1,73 @@
-import "dotenv/config";
-import { db, schema } from "@/lib/db";
+import { readModelsFile, writeModelsFile } from "@/lib/data/models-file";
 import { fetchWikidataEntity, extractModelCore } from "@/lib/pipeline/wikidata";
-import { eq } from "drizzle-orm";
 
-const userAgent =
-  process.env.WIKIPEDIA_USER_AGENT ?? "czechsubaruclub.cz pipeline";
+const userAgent = process.env.WIKIPEDIA_USER_AGENT ?? "czechsubaruclub.cz pipeline";
 
-type Args = {
-  dryRun: boolean;
-  onlySlug: string | null;
-};
-
-function parseArgs(): Args {
+function parseArgs() {
   const args = process.argv.slice(2);
   return {
     dryRun: args.includes("--dry-run"),
-    onlySlug:
-      args.find((a) => a.startsWith("--only="))?.replace("--only=", "") ??
-      null,
+    onlySlug: args.find((a) => a.startsWith("--only="))?.replace("--only=", "") ?? null,
   };
 }
 
 async function main() {
   const { dryRun, onlySlug } = parseArgs();
+  console.log(`[wikidata] Start (dryRun=${dryRun}, onlySlug=${onlySlug ?? "ALL"})`);
 
-  console.log(
-    `[wikidata] Start (dryRun=${dryRun}, onlySlug=${onlySlug ?? "ALL"})`,
-  );
-
-  const all = await db
-    .select({
-      slug: schema.models.slug,
-      qid: schema.models.wikidataQid,
-      currentImage: schema.models.heroImageUrl,
-      currentStart: schema.models.productionStart,
-    })
-    .from(schema.models);
-
-  const targets = onlySlug
-    ? all.filter((m) => m.slug === onlySlug)
-    : all;
-
+  const models = readModelsFile();
+  const targets = onlySlug ? models.filter((m) => m.slug === onlySlug) : models;
   if (targets.length === 0) {
-    console.error(`[wikidata] No models found (filter: ${onlySlug ?? "ALL"})`);
+    console.error(`[wikidata] No models (filter: ${onlySlug ?? "ALL"})`);
     process.exit(1);
   }
 
-  console.log(`[wikidata] Processing ${targets.length} models`);
-
-  let updatedCount = 0;
-  let skippedCount = 0;
-  let errorCount = 0;
-
+  let updated = 0,
+    skipped = 0,
+    errors = 0,
+    changedAny = false;
   for (const m of targets) {
-    if (!m.qid) {
-      console.warn(`[wikidata] ✗ ${m.slug} has no wikidataQid, skipping`);
-      skippedCount++;
+    if (!m.wikidataQid) {
+      console.warn(`[wikidata] ✗ ${m.slug} no qid`);
+      skipped++;
       continue;
     }
-
     try {
-      const entity = await fetchWikidataEntity(m.qid, userAgent);
-      const core = extractModelCore(entity);
-
+      const core = extractModelCore(await fetchWikidataEntity(m.wikidataQid, userAgent));
       const changes: string[] = [];
-      const updates: Partial<{
-        heroImageUrl: string;
-        productionStart: number;
-      }> = {};
-
-      if (core.imageUrl && core.imageUrl !== m.currentImage) {
-        updates.heroImageUrl = core.imageUrl;
+      if (core.imageUrl && core.imageUrl !== m.heroImageUrl) {
         changes.push(`hero_image_url=${core.imageUrl.slice(0, 60)}...`);
+        if (!dryRun) {
+          m.heroImageUrl = core.imageUrl;
+          m.updatedAt = new Date().toISOString();
+          changedAny = true;
+        }
       }
       if (
         core.inceptionYear &&
-        m.currentStart !== null &&
-        core.inceptionYear !== m.currentStart
+        m.productionStart !== null &&
+        core.inceptionYear !== m.productionStart
       ) {
         changes.push(
-          `production_start: DB=${m.currentStart}, Wiki=${core.inceptionYear} (NOT overwriting)`,
+          `production_start: JSON=${m.productionStart}, Wiki=${core.inceptionYear} (NOT overwriting)`,
         );
       }
-
-      if (changes.length === 0) {
-        console.log(`[wikidata] = ${m.slug} (no changes)`);
-      } else if (dryRun) {
-        console.log(
-          `[wikidata] ~ ${m.slug} would update: ${changes.join(", ")}`,
-        );
-        updatedCount++;
-      } else {
-        await db
-          .update(schema.models)
-          .set({ ...updates, updatedAt: new Date() })
-          .where(eq(schema.models.slug, m.slug));
-        console.log(`[wikidata] ✓ ${m.slug} updated: ${changes.join(", ")}`);
-        updatedCount++;
+      if (changes.length === 0) console.log(`[wikidata] = ${m.slug}`);
+      else {
+        console.log(`[wikidata] ${dryRun ? "~" : "✓"} ${m.slug}: ${changes.join(", ")}`);
+        updated++;
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error(`[wikidata] ✗ ${m.slug} FAILED: ${msg}`);
-      errorCount++;
+      console.error(
+        `[wikidata] ✗ ${m.slug} FAILED: ${err instanceof Error ? err.message : String(err)}`,
+      );
+      errors++;
     }
   }
 
-  console.log(
-    `[wikidata] Done. updated=${updatedCount} skipped=${skippedCount} errors=${errorCount}`,
-  );
-  process.exit(errorCount > 0 ? 1 : 0);
+  if (!dryRun && changedAny) writeModelsFile(models);
+  console.log(`[wikidata] Done. updated=${updated} skipped=${skipped} errors=${errors}`);
+  process.exit(errors > 0 ? 1 : 0);
 }
 
 main().catch((err) => {

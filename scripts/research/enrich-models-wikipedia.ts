@@ -1,117 +1,82 @@
-import "dotenv/config";
-import { db, schema } from "@/lib/db";
+import { readModelsFile, writeModelsFile } from "@/lib/data/models-file";
 import { fetchCsEnSummariesByQid } from "@/lib/pipeline/wikipedia";
-import { eq } from "drizzle-orm";
 
-const userAgent =
-  process.env.WIKIPEDIA_USER_AGENT ?? "czechsubaruclub.cz pipeline";
+const userAgent = process.env.WIKIPEDIA_USER_AGENT ?? "czechsubaruclub.cz pipeline";
 
-type Args = {
-  dryRun: boolean;
-  onlySlug: string | null;
-  overwrite: boolean;
-};
-
-function parseArgs(): Args {
+function parseArgs() {
   const args = process.argv.slice(2);
   return {
     dryRun: args.includes("--dry-run"),
     overwrite: args.includes("--overwrite"),
-    onlySlug:
-      args.find((a) => a.startsWith("--only="))?.replace("--only=", "") ??
-      null,
+    onlySlug: args.find((a) => a.startsWith("--only="))?.replace("--only=", "") ?? null,
   };
 }
 
 async function main() {
   const { dryRun, onlySlug, overwrite } = parseArgs();
+  console.log(`[wikipedia] Start (dryRun=${dryRun}, overwrite=${overwrite}, onlySlug=${onlySlug ?? "ALL"})`);
 
-  console.log(
-    `[wikipedia] Start (dryRun=${dryRun}, overwrite=${overwrite}, onlySlug=${onlySlug ?? "ALL"})`,
-  );
-
-  const all = await db
-    .select({
-      slug: schema.models.slug,
-      qid: schema.models.wikidataQid,
-      descCs: schema.models.descriptionCs,
-      descEn: schema.models.descriptionEnRaw,
-    })
-    .from(schema.models);
-
-  const targets = onlySlug ? all.filter((m) => m.slug === onlySlug) : all;
-
+  const models = readModelsFile();
+  const targets = onlySlug ? models.filter((m) => m.slug === onlySlug) : models;
   if (targets.length === 0) {
-    console.error(`[wikipedia] No models found (filter: ${onlySlug ?? "ALL"})`);
+    console.error(`[wikipedia] No models (filter: ${onlySlug ?? "ALL"})`);
     process.exit(1);
   }
 
-  console.log(`[wikipedia] Processing ${targets.length} models`);
-
-  let updatedCount = 0;
-  let skippedCount = 0;
-  let errorCount = 0;
-
+  let updated = 0,
+    skipped = 0,
+    errors = 0,
+    changedAny = false;
   for (const m of targets) {
-    if (!m.qid) {
-      console.warn(`[wikipedia] ✗ ${m.slug} has no wikidataQid, skipping`);
-      skippedCount++;
+    if (!m.wikidataQid) {
+      console.warn(`[wikipedia] ✗ ${m.slug} no qid`);
+      skipped++;
       continue;
     }
-
     try {
-      const { cs, en } = await fetchCsEnSummariesByQid(m.qid, userAgent);
-
-      const updates: Partial<{
-        descriptionCs: string;
-        descriptionEnRaw: string;
-      }> = {};
+      const { cs, en } = await fetchCsEnSummariesByQid(m.wikidataQid, userAgent);
       const changes: string[] = [];
+      let touched = false;
 
-      if (cs?.extract && (overwrite || !m.descCs)) {
-        updates.descriptionCs = cs.extract;
-        changes.push(`description_cs: +${cs.extract.length} chars (${cs.url})`);
-      } else if (cs?.extract && m.descCs && !overwrite) {
-        changes.push(`description_cs: exists (skip, use --overwrite)`);
-      } else if (!cs) {
-        changes.push(`description_cs: NO CS WIKIPEDIA`);
+      if (cs?.extract && (overwrite || !m.descriptionCs)) {
+        changes.push(`description_cs: +${cs.extract.length} chars`);
+        if (!dryRun) {
+          m.descriptionCs = cs.extract;
+          touched = true;
+        }
+      } else if (cs?.extract && m.descriptionCs && !overwrite) changes.push(`description_cs: exists (skip)`);
+      else if (!cs) changes.push(`description_cs: NO CS WIKIPEDIA`);
+
+      if (en?.extract && (overwrite || !m.descriptionEnRaw)) {
+        changes.push(`description_en_raw: +${en.extract.length} chars`);
+        if (!dryRun) {
+          m.descriptionEnRaw = en.extract;
+          touched = true;
+        }
+      } else if (en?.extract && m.descriptionEnRaw && !overwrite) changes.push(`description_en_raw: exists (skip)`);
+      else if (!en) changes.push(`description_en_raw: NO EN WIKIPEDIA`);
+
+      if (touched) {
+        m.updatedAt = new Date().toISOString();
+        changedAny = true;
       }
-
-      if (en?.extract && (overwrite || !m.descEn)) {
-        updates.descriptionEnRaw = en.extract;
-        changes.push(
-          `description_en_raw: +${en.extract.length} chars (${en.url})`,
-        );
-      } else if (en?.extract && m.descEn && !overwrite) {
-        changes.push(`description_en_raw: exists (skip, use --overwrite)`);
-      } else if (!en) {
-        changes.push(`description_en_raw: NO EN WIKIPEDIA`);
-      }
-
-      if (Object.keys(updates).length === 0) {
+      if (changes.length > 0 && changes.every((c) => c.includes("exists") || c.includes("NO ")))
         console.log(`[wikipedia] = ${m.slug} (${changes.join("; ")})`);
-      } else if (dryRun) {
-        console.log(`[wikipedia] ~ ${m.slug} would update: ${changes.join("; ")}`);
-        updatedCount++;
-      } else {
-        await db
-          .update(schema.models)
-          .set({ ...updates, updatedAt: new Date() })
-          .where(eq(schema.models.slug, m.slug));
-        console.log(`[wikipedia] ✓ ${m.slug} updated: ${changes.join("; ")}`);
-        updatedCount++;
+      else {
+        console.log(`[wikipedia] ${dryRun ? "~" : "✓"} ${m.slug}: ${changes.join("; ")}`);
+        updated++;
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error(`[wikipedia] ✗ ${m.slug} FAILED: ${msg}`);
-      errorCount++;
+      console.error(
+        `[wikipedia] ✗ ${m.slug} FAILED: ${err instanceof Error ? err.message : String(err)}`,
+      );
+      errors++;
     }
   }
 
-  console.log(
-    `[wikipedia] Done. updated=${updatedCount} skipped=${skippedCount} errors=${errorCount}`,
-  );
-  process.exit(errorCount > 0 ? 1 : 0);
+  if (!dryRun && changedAny) writeModelsFile(models);
+  console.log(`[wikipedia] Done. updated=${updated} skipped=${skipped} errors=${errors}`);
+  process.exit(errors > 0 ? 1 : 0);
 }
 
 main().catch((err) => {

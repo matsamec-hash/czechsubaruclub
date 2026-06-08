@@ -1,5 +1,5 @@
-import "dotenv/config";
-import { db, schema } from "@/lib/db";
+import { readModelsFile, writeModelsFile } from "@/lib/data/models-file";
+import type { Model } from "@/lib/data/models";
 import seedData from "./seed-data/subaru-models.json" with { type: "json" };
 
 type SeedEntry = {
@@ -13,44 +13,38 @@ type SeedEntry = {
   productionEnd?: number;
 };
 
-async function main() {
+function main() {
   const entries = seedData as SeedEntry[];
-  console.log(`[seed-models] Inserting ${entries.length} models...`);
+  const existing = readModelsFile();
+  const bySlug = new Map(existing.map((m) => [m.slug, m]));
+  const now = new Date().toISOString();
 
-  for (const entry of entries) {
-    await db
-      .insert(schema.models)
-      .values({
-        slug: entry.slug,
-        name: entry.name,
-        nameFull: entry.nameFull,
-        category: entry.category,
-        productionStart: entry.productionStart ?? null,
-        productionEnd: entry.productionEnd ?? null,
-        wikidataQid: entry.wikidataQid,
-        contentTier: "bronze",
-      })
-      .onConflictDoUpdate({
-        target: schema.models.slug,
-        set: {
-          name: entry.name,
-          nameFull: entry.nameFull,
-          category: entry.category,
-          productionStart: entry.productionStart ?? null,
-          productionEnd: entry.productionEnd ?? null,
-          wikidataQid: entry.wikidataQid,
-          updatedAt: new Date(),
-        },
-      });
-
-    console.log(`[seed-models] ✓ ${entry.slug}`);
+  for (const e of entries) {
+    const prev = bySlug.get(e.slug);
+    const merged: Model = {
+      id: prev?.id ?? e.slug,
+      slug: e.slug,
+      name: e.name,
+      nameFull: e.nameFull,
+      category: e.category,
+      productionStart: e.productionStart ?? null,
+      productionEnd: e.productionEnd ?? null,
+      wikidataQid: e.wikidataQid,
+      // preserve hand-curated / enriched fields:
+      taglineCs: prev?.taglineCs ?? null,
+      descriptionCs: prev?.descriptionCs ?? null,
+      descriptionEnRaw: prev?.descriptionEnRaw ?? null,
+      heroImageUrl: prev?.heroImageUrl ?? null,
+      contentTier: prev?.contentTier ?? "bronze",
+      createdAt: prev?.createdAt ?? now,
+      updatedAt: now,
+    };
+    bySlug.set(e.slug, merged);
+    console.log(`[seed-models] ✓ ${e.slug}`);
   }
 
-  console.log(`[seed-models] Done. Total: ${entries.length} processed.`);
-  process.exit(0);
+  writeModelsFile([...bySlug.values()]);
+  console.log(`[seed-models] Done. Total: ${bySlug.size} models in data/models.json.`);
 }
 
-main().catch((err) => {
-  console.error("[seed-models] FAILED:", err);
-  process.exit(1);
-});
+main();
