@@ -1,7 +1,4 @@
-import { config } from "dotenv";
-config({ path: ".env.local" });
-
-import { db, schema } from "@/lib/db";
+import { listModels } from "@/lib/data/models";
 import { writeFileSync } from "node:fs";
 
 const CATEGORY_LABEL: Record<string, string> = {
@@ -30,7 +27,7 @@ const HISTORY = [
 ];
 
 (async () => {
-  const rows = await db.select().from(schema.models).orderBy(schema.models.slug);
+  const rows = listModels();
   const cats = Array.from(new Set(rows.map((r) => r.category))).sort();
   const heroes = rows.filter((r) => ["impreza", "wrx-sti", "brz"].includes(r.slug));
   const heroSlugs = new Set(heroes.map((h) => h.slug));
