@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 
+import { PhotoCreditPlain } from "./PhotoCredit";
+
 type Model = {
   slug: string;
   name: string;
@@ -10,6 +12,9 @@ type Model = {
   productionStart: number | null;
   productionEnd: number | null;
   heroImageUrl: string | null;
+  heroImageCredit?: string | null;
+  heroImageLicense?: string | null;
+  heroImageSource?: string | null;
   wikidataQid: string | null;
 };
 
@@ -118,6 +123,13 @@ export function ModelsCatalog({ models }: { models: Model[] }) {
               <div className="text-[12px] text-white/60 tabular-nums">
                 {years(m)}
               </div>
+              {m.heroImageUrl && (
+                <PhotoCreditPlain
+                  credit={m.heroImageCredit}
+                  license={m.heroImageLicense}
+                  className="block text-[10px] text-white/40 mt-1"
+                />
+              )}
             </div>
           </a>
         ))}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { listModels } from "@/lib/data/models";
 import { ModelsCatalog } from "../(components)/ModelsCatalog";
+import { PhotoCredits } from "../(components)/PhotoCredits";
 
 export const metadata: Metadata = {
   title: "Modely Subaru — kompletní katalog",
@@ -24,6 +25,9 @@ async function fetchModels() {
     productionStart: m.productionStart,
     productionEnd: m.productionEnd,
     heroImageUrl: m.heroImageUrl,
+    heroImageCredit: m.heroImageCredit ?? null,
+    heroImageLicense: m.heroImageLicense ?? null,
+    heroImageSource: m.heroImageSource ?? null,
     wikidataQid: m.wikidataQid,
   }));
 }
@@ -100,6 +104,8 @@ export default async function ModelyPage() {
           <ModelsCatalog models={models} />
         )}
       </section>
+
+      <PhotoCredits photos={models} />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { listModels } from '@/lib/data/models';
+import { licenseUrl } from '@/lib/photo-license';
 
 export const metadata: Metadata = {
   title: 'Fotografie — autoři a licence | Czech Subaru Club',
@@ -26,30 +27,64 @@ export default function FotografiePage() {
       </p>
 
       <ul className="mt-10 space-y-3">
-        {modely.map((m) => (
-          <li key={m.slug} className="text-[13px] text-white/60">
-            <Link href={`/modely/${m.slug}`} className="text-white/80 hover:text-white">
-              {m.name}
-            </Link>
-            {' — '}
-            {m.heroImageCredit}
-            {m.heroImageLicense ? ` · ${m.heroImageLicense}` : ''}
-            {m.heroImageSource && (
-              <>
-                {' · '}
-                <a
-                  href={m.heroImageSource}
-                  rel="nofollow noopener"
-                  target="_blank"
-                  className="underline"
-                >
-                  zdroj
-                </a>
-              </>
-            )}
-          </li>
-        ))}
+        {modely.map((m) => {
+          const href = licenseUrl(m.heroImageLicense);
+          return (
+            <li key={m.slug} className="text-[13px] text-white/60">
+              <Link href={`/modely/${m.slug}`} className="text-white/80 hover:text-white">
+                {m.name}
+              </Link>
+              {' — Foto: '}
+              {m.heroImageCredit}
+              {m.heroImageLicense && (
+                <>
+                  {' · '}
+                  {href ? (
+                    <a
+                      href={href}
+                      rel="license nofollow noopener"
+                      target="_blank"
+                      className="underline"
+                    >
+                      {m.heroImageLicense}
+                    </a>
+                  ) : (
+                    m.heroImageLicense
+                  )}
+                </>
+              )}
+              {m.heroImageSource && (
+                <>
+                  {' · '}
+                  <a
+                    href={m.heroImageSource}
+                    rel="nofollow noopener"
+                    target="_blank"
+                    className="underline"
+                  >
+                    zdroj
+                  </a>
+                </>
+              )}
+            </li>
+          );
+        })}
       </ul>
+
+      <h2 className="mt-14 text-lg font-semibold">Video na úvodní stránce</h2>
+      <p className="mt-3 text-[13px] text-white/60 leading-relaxed">
+        Podkladové video v hlavičce pochází z{' '}
+        <a
+          href="https://www.pexels.com/video/16768844/"
+          rel="nofollow noopener"
+          target="_blank"
+          className="underline"
+        >
+          Pexels
+        </a>{' '}
+        (Pexels licence — volné užití, atribuce nepovinná). Soubor hostujeme
+        sami, nenačítá se z cizího serveru.
+      </p>
     </main>
   );
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getModel, listModels } from "@/lib/data/models";
 import { PhotoCredit } from '@/app/(components)/PhotoCredit';
+import { creditLine, licenseUrl } from '@/lib/photo-license';
 
 export const dynamicParams = false; // static export: only slugs from generateStaticParams are emitted
 
@@ -80,7 +81,11 @@ export async function generateMetadata({
               url: m.heroImageUrl,
               width: 1200,
               height: 630,
-              alt: m.nameFull,
+              // OpenGraph nemá pole pro atribuci — jediné místo, kam se dá
+              // autor a licence u náhledu dostat, je alt text.
+              alt: [m.nameFull, creditLine(m.heroImageCredit, m.heroImageLicense)]
+                .filter(Boolean)
+                .join(" — "),
             },
           ]
         : undefined,
@@ -130,7 +135,21 @@ export default async function ModelDetailPage({
     model: m.name,
     bodyType: CATEGORY_BODY[m.category] ?? m.category,
     ...(m.productionStart && { productionDate: String(m.productionStart) }),
-    ...(m.heroImageUrl && { image: m.heroImageUrl }),
+    ...(m.heroImageUrl && {
+      image: {
+        "@type": "ImageObject",
+        contentUrl: m.heroImageUrl,
+        ...(m.heroImageCredit && {
+          creditText: m.heroImageCredit,
+          creator: { "@type": "Person", name: m.heroImageCredit },
+          copyrightNotice: `© ${m.heroImageCredit}`,
+        }),
+        ...(licenseUrl(m.heroImageLicense) && {
+          license: licenseUrl(m.heroImageLicense),
+        }),
+        ...(m.heroImageSource && { acquireLicensePage: m.heroImageSource }),
+      },
+    }),
     ...(m.descriptionCs && { description: m.descriptionCs }),
     ...(m.descriptionEnRaw && !m.descriptionCs && { description: m.descriptionEnRaw }),
     url: `https://czechsubaruclub.cz/modely/${slug}`,
@@ -169,14 +188,6 @@ export default async function ModelDetailPage({
             </>
           )}
         </div>
-        {m.heroImageUrl && (
-          <PhotoCredit
-            credit={m.heroImageCredit}
-            license={m.heroImageLicense}
-            source={m.heroImageSource}
-            className="absolute bottom-2 right-4 z-10 text-[10px] text-white/35"
-          />
-        )}
         <div className="mx-auto max-w-5xl px-8 pt-24 pb-32 relative">
           <div className="text-[12px] text-white/40 mb-6">
             <Link href="/" className="hover:text-white transition">
@@ -210,11 +221,21 @@ export default async function ModelDetailPage({
       {/* === HERO FOTO === */}
       {m.heroImageUrl && (
         <section className="mx-auto max-w-5xl px-8 -mt-16 mb-4 relative">
-          <img
-            src={m.heroImageUrl}
-            alt={m.nameFull}
-            className="w-full aspect-[16/9] object-cover rounded-xl border border-white/[0.08] shadow-2xl"
-          />
+          <figure>
+            <img
+              src={m.heroImageUrl}
+              alt={m.nameFull}
+              className="w-full aspect-[16/9] object-cover rounded-xl border border-white/[0.08] shadow-2xl"
+            />
+            <figcaption>
+              <PhotoCredit
+                credit={m.heroImageCredit}
+                license={m.heroImageLicense}
+                source={m.heroImageSource}
+                className="mt-2 text-[11px] text-white/40"
+              />
+            </figcaption>
+          </figure>
         </section>
       )}
 

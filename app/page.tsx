@@ -3,6 +3,8 @@ import { ModelsCatalog } from "./(components)/ModelsCatalog";
 import { CountUp } from "./(components)/CountUp";
 import { Reveal } from "./(components)/Reveal";
 import { HomeQuizBlock } from "./(components)/HomeQuizBlock";
+import { PhotoCredit, PhotoCreditPlain } from "./(components)/PhotoCredit";
+import { PhotoCredits } from "./(components)/PhotoCredits";
 
 const HISTORY = [
   {
@@ -122,44 +124,13 @@ async function fetchModels() {
     productionStart: m.productionStart,
     productionEnd: m.productionEnd,
     heroImageUrl: m.heroImageUrl,
+    heroImageCredit: m.heroImageCredit ?? null,
+    heroImageLicense: m.heroImageLicense ?? null,
+    heroImageSource: m.heroImageSource ?? null,
     wikidataQid: m.wikidataQid,
   }));
 }
 
-const FAKE_USERS = [
-  {
-    name: "Honza",
-    city: "Praha",
-    story:
-      "Koupil 2018, 4 sezóny rally simulátor + 1 reálná na Sosnové.",
-  },
-  {
-    name: "Tom",
-    city: "Brno",
-    story: "Daily driver, 180 000 km, bez větších oprav. Boxer prostě jede.",
-  },
-  {
-    name: "Lucie",
-    city: "Plzeň",
-    story:
-      "Restorace od 2021. Nový lak, repas motoru, originál interiér.",
-  },
-  {
-    name: "Pavel",
-    city: "Ostrava",
-    story: "Import z Japonska, RHD, naprostá rarita. Číslo 234 z 500.",
-  },
-  {
-    name: "Karel",
-    city: "Hradec",
-    story: "Servis pravidelně, výlet do Beskyd. 4×4 nikdy nezklamalo.",
-  },
-  {
-    name: "Eliška",
-    city: "Liberec",
-    story: "JDM kei mazlík. 90 km/h max, na nákupy stačí.",
-  },
-];
 
 const FORUM_THREADS = [
   {
@@ -214,7 +185,6 @@ export default async function HomePage() {
   const heroSlugs = new Set(heroes.map((h) => h.slug));
   const rest = models.filter((m) => !heroSlugs.has(m.slug));
   const wrxSti = models.find((m) => m.slug === "wrx-sti");
-  const userModels = models.slice(0, 6);
 
   return (
     <>
@@ -241,13 +211,20 @@ export default async function HomePage() {
             poster={wrxSti?.heroImageUrl ?? undefined}
             className="absolute inset-0 w-full h-full object-cover opacity-50"
           >
-            <source
-              src="https://videos.pexels.com/video-files/16768844/16768844-hd_1280_720_60fps.mp4"
-              type="video/mp4"
-            />
+            {/* Pexels licence: volné užití bez atribuce, ale bez hotlinkování —
+                soubor proto leží v public/ (zdroj: pexels.com/video/16768844). */}
+            <source src="/video/hero-subaru.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0c]/40 via-[#0a0a0c]/70 to-[#0a0a0c]" />
         </div>
+        {wrxSti?.heroImageUrl && (
+          <PhotoCredit
+            credit={wrxSti.heroImageCredit}
+            license={wrxSti.heroImageLicense}
+            source={wrxSti.heroImageSource}
+            className="absolute bottom-2 right-4 z-10 text-[10px] text-white/35"
+          />
+        )}
         <div className="mx-auto max-w-7xl px-8 pt-32 pb-40 relative">
         <div className="reveal in">
           <div className="inline-flex items-center gap-2 text-[12px] text-white/60 font-medium mb-10">
@@ -486,7 +463,7 @@ export default async function HomePage() {
             </h2>
           </div>
           <span className="text-[14px] text-white/40 max-w-[300px] md:text-right">
-            Galerie uživatelů — mockup.
+            Galerie uživatelů — zatím prázdná, funkce se připravuje.
           </span>
         </Reveal>
         <Reveal className="mb-14">
@@ -528,50 +505,18 @@ export default async function HomePage() {
             </div>
           </div>
         </Reveal>
-        <Reveal className="grid grid-cols-1 md:grid-cols-3 gap-2">
-          {userModels.map((m, i) => {
-            const user = FAKE_USERS[i];
-            if (!user) return null;
-            return (
-              <div
-                key={m.slug}
-                className="bg-[#131316] rounded-lg overflow-hidden transition hover:-translate-y-0.5"
-              >
-                <div className="aspect-[16/10] overflow-hidden">
-                  {m.heroImageUrl && (
-                    <img
-                      src={m.heroImageUrl}
-                      alt={m.name}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
-                    />
-                  )}
-                </div>
-                <div className="p-5">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 rounded-full bg-[#4a8dff] flex items-center justify-center text-[13px] font-medium text-white">
-                      {user.name[0]}
-                    </div>
-                    <div>
-                      <div className="text-[13px] font-medium text-white">
-                        {user.name}
-                      </div>
-                      <div className="text-[11px] text-white/40 mt-0.5">
-                        {user.city} · {m.nameFull}, {m.productionStart}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-[13px] text-white/60 leading-relaxed mb-3">
-                    {user.story}
-                  </p>
-                  <div className="flex gap-4 text-[12px] text-white/40">
-                    <span>♡ {Math.floor((i + 1) * 7.3) + 5}</span>
-                    <span>💬 {(i + 1) * 2}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <Reveal>
+          <div className="rounded-2xl border border-dashed border-white/[0.12] p-14 text-center">
+            <div className="text-[13px] uppercase tracking-[0.14em] text-white/40 mb-3">
+              Zatím prázdno
+            </div>
+            <p className="text-[15px] text-white/60 leading-relaxed max-w-[520px] mx-auto">
+              Galerie členů zatím žádné auto neobsahuje — klub teprve vzniká.
+              Až funkce naběhne, budou tu jen fotky, které sem jejich autoři
+              sami nahrají a u kterých bude uvedené jejich jméno. Cizí fotky
+              vydávané za snímky členů tu nikdy nebudou.
+            </p>
+          </div>
         </Reveal>
       </section>
 
@@ -692,15 +637,27 @@ export default async function HomePage() {
               </p>
             </div>
           </div>
-          <div className="aspect-[4/5] rounded-lg overflow-hidden bg-[#131316] md:sticky md:top-24 md:self-start">
+          <figure className="md:sticky md:top-24 md:self-start">
+            <div className="aspect-[4/5] rounded-lg overflow-hidden bg-[#131316]">
+              {wrxSti?.heroImageUrl && (
+                <img
+                  src={wrxSti.heroImageUrl}
+                  alt="Subaru WRX STI"
+                  className="w-full h-full object-cover brightness-90"
+                />
+              )}
+            </div>
             {wrxSti?.heroImageUrl && (
-              <img
-                src={wrxSti.heroImageUrl}
-                alt="Subaru WRX STI"
-                className="w-full h-full object-cover brightness-90"
-              />
+              <figcaption>
+                <PhotoCredit
+                  credit={wrxSti.heroImageCredit}
+                  license={wrxSti.heroImageLicense}
+                  source={wrxSti.heroImageSource}
+                  className="mt-2 text-[11px] text-white/40"
+                />
+              </figcaption>
             )}
-          </div>
+          </figure>
         </Reveal>
       </section>
 
@@ -745,6 +702,9 @@ export default async function HomePage() {
           </div>
         </Reveal>
       </section>
+
+      {/* === FOTOGRAFIE — AUTOŘI A LICENCE === */}
+      <PhotoCredits photos={models} />
     </>
   );
 }
@@ -761,6 +721,9 @@ function BentoCard({
     productionStart: number | null;
     productionEnd: number | null;
     heroImageUrl: string | null;
+    heroImageCredit?: string | null;
+    heroImageLicense?: string | null;
+    heroImageSource?: string | null;
     wikidataQid: string | null;
   };
   size: "lg" | "md" | "sm";
@@ -799,6 +762,13 @@ function BentoCard({
         <div className="text-[13px] text-white/60 tabular-nums mt-1">
           {years}
         </div>
+        {m.heroImageUrl && (
+          <PhotoCreditPlain
+            credit={m.heroImageCredit}
+            license={m.heroImageLicense}
+            className="block text-[10px] text-white/40 mt-1.5"
+          />
+        )}
       </div>
     </a>
   );
