@@ -56,3 +56,19 @@ next-env.d.ts
 # Drizzle
 drizzle/meta/_journal.json.bak
 .superpowers/
+
+# --- security-audit-2026-06-07 hardening ---
+.env
+.env.*
+!.env.example
+!.env.local.example
+*.save
+*.key
+*.pem
+*.p12
+*.pfx
+service-account*.json
+# DB dumps / backups (may contain PII)
+*.dump
+*.sql.gz
+db-backup*/
