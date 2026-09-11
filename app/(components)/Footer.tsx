@@ -95,6 +95,11 @@ export function Footer() {
                 Cookies
               </Link>
             </li>
+            <li>
+              <Link href="/fotografie" className="hover:text-white transition">
+                Fotografie a licence
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

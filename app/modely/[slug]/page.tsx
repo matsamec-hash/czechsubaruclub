@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getModel, listModels } from "@/lib/data/models";
+import { PhotoCredit } from '@/app/(components)/PhotoCredit';
 
 export const dynamicParams = false; // static export: only slugs from generateStaticParams are emitted
 
@@ -168,6 +169,14 @@ export default async function ModelDetailPage({
             </>
           )}
         </div>
+        {m.heroImageUrl && (
+          <PhotoCredit
+            credit={m.heroImageCredit}
+            license={m.heroImageLicense}
+            source={m.heroImageSource}
+            className="absolute bottom-2 right-4 z-10 text-[10px] text-white/35"
+          />
+        )}
         <div className="mx-auto max-w-5xl px-8 pt-24 pb-32 relative">
           <div className="text-[12px] text-white/40 mb-6">
             <Link href="/" className="hover:text-white transition">

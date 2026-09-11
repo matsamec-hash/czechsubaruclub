@@ -12,6 +12,10 @@ export type Model = {
   productionStart: number | null;
   productionEnd: number | null;
   heroImageUrl: string | null;
+  /** Autor, licence a odkaz na zdroj — fotky jsou z Wikimedia Commons pod CC. */
+  heroImageCredit?: string | null;
+  heroImageLicense?: string | null;
+  heroImageSource?: string | null;
   wikidataQid: string | null;
   contentTier: string;
   createdAt: string;

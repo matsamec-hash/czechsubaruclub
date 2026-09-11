@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getModel } from "@/lib/data/models";
 import { ktereSubaru } from "@/lib/quizzes";
 import { ShareButton } from "@/app/(components)/ShareButton";
+import { PhotoCredit } from '@/app/(components)/PhotoCredit';
 
 export const dynamicParams = false;
 
@@ -71,11 +72,18 @@ export default async function Page({
         </div>
 
         {model.heroImageUrl && (
-          <img
-            src={model.heroImageUrl}
-            alt={model.name}
-            className="w-full h-48 sm:h-56 object-cover rounded-xl border border-white/[0.08] mb-5"
-          />
+          <figure className="mb-5">
+            <img
+              src={model.heroImageUrl}
+              alt={model.name}
+              className="w-full h-48 sm:h-56 object-cover rounded-xl border border-white/[0.08]"
+            />
+            <PhotoCredit
+              credit={model.heroImageCredit}
+              license={model.heroImageLicense}
+              source={model.heroImageSource}
+            />
+          </figure>
         )}
 
         <div className="text-[11px] uppercase tracking-[0.14em] text-white/40 mb-1">
