@@ -30,7 +30,7 @@ export default function SoukromiPage() {
         <p>
           Správcem osobních údajů ve smyslu čl. 4 odst. 7 GDPR je společnost{" "}
           <strong>Samec Digital s.r.o.</strong>, IČO 29547539, se sídlem Na
-          Břehu 378, 387 11 Katovice. Kontakt:{" "}
+          Břehu 378, 387 11 Katovice, zapsaná v obchodním rejstříku vedeném Krajským soudem v Českých Budějovicích, oddíl C, vložka 36598. Kontakt:{" "}
           <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>.
         </p>
 

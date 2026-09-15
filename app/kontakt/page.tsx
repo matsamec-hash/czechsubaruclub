@@ -31,6 +31,9 @@ export default function KontaktPage() {
           <p className="text-[14px] text-white/60 mt-1">
             IČO 29547539 · Na Břehu 378, 387 11 Katovice
           </p>
+          <p className="text-[14px] text-white/60 mt-1">
+            zapsaná v obchodním rejstříku vedeném Krajským soudem v Českých Budějovicích, oddíl C, vložka 36598
+          </p>
         </div>
 
         <div>
