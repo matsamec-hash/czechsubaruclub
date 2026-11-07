@@ -90,23 +90,6 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="cs">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
-          rel="stylesheet"
-        />
-        <script
-          src="https://analytics.ahrefs.com/analytics.js"
-          data-key="7kwes6IuDDQkLWDGZQJEow"
-          async
-        />
-      </head>
       <body className="flex flex-col min-h-screen">
         <a
           href="#main-content"
