@@ -138,7 +138,7 @@ export default async function ModelDetailPage({
     ...(m.heroImageUrl && {
       image: {
         "@type": "ImageObject",
-        contentUrl: m.heroImageUrl,
+        contentUrl: `https://czechsubaruclub.cz${m.heroImageUrl}`,
         ...(m.heroImageCredit && {
           creditText: m.heroImageCredit,
           creator: { "@type": "Person", name: m.heroImageCredit },

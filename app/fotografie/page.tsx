@@ -25,6 +25,10 @@ export default function FotografiePage() {
         </a>{' '}
         a opravíme to.
       </p>
+      <p className="mt-3 text-white/60 leading-relaxed">
+        Snímky jsou převedené do formátu WebP a případně zmenšené — licence CC BY a CC BY-SA žádají,
+        aby byla úprava uvedena.
+      </p>
 
       <ul className="mt-10 space-y-3">
         {modely.map((m) => {

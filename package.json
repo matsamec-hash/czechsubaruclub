@@ -13,6 +13,7 @@
     "seed:models": "tsx scripts/research/seed-models.ts",
     "enrich:models:wikidata": "tsx scripts/research/enrich-models-wikidata.ts",
     "enrich:models:wikipedia": "tsx scripts/research/enrich-models-wikipedia.ts",
+    "localize:model-photos": "tsx scripts/research/localize-model-photos.ts",
     "audit:content": "tsx scripts/research/audit.ts",
     "preview:models": "tsx scripts/preview-models.ts"
   },

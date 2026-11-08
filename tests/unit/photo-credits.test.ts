@@ -10,7 +10,7 @@
  * URL we can link to, and no component that renders a model photo may do so
  * without a credit.
  */
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
@@ -88,6 +88,17 @@ describe("data/models.json attribution", () => {
     expect(bad).toEqual([]);
   });
 
+  it("every photo is self-hosted in public/fotky/", () => {
+    const bad = withPhoto
+      .filter(
+        (m) =>
+          !m.heroImageUrl?.startsWith("/fotky/") ||
+          !existsSync(root + "public" + m.heroImageUrl),
+      )
+      .map((m) => `${m.slug}: ${m.heroImageUrl}`);
+    expect(bad).toEqual([]);
+  });
+
   it("every photo links to the source file", () => {
     const bad = withPhoto
       .filter((m) => !m.heroImageSource?.startsWith("https://"))
@@ -116,8 +127,8 @@ describe("every place that renders a model photo also renders a credit", () => {
   }
 
   it("no component hotlinks a third-party media host", () => {
-    // Wikimedia hotlinks are tolerated (WMF allows them); everything else is not.
-    const banned = /https?:\/\/(videos\.pexels\.com|images\.unsplash\.com|[a-z0-9.-]*\.?(?:shutterstock|gettyimages|istockphoto)\.com)/i;
+    // A third-party host would see the visitor's IP before consent — media is self-hosted.
+    const banned = /https?:\/\/(videos\.pexels\.com|images\.unsplash\.com|upload\.wikimedia\.org|[a-z0-9.-]*\.?(?:shutterstock|gettyimages|istockphoto)\.com)/i;
     for (const rel of [...renderers, "app/layout.tsx", "app/fotografie/page.tsx"]) {
       expect(read(rel), `${rel} hotlinks external media`).not.toMatch(banned);
     }

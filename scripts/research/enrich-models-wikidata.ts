@@ -35,8 +35,10 @@ async function main() {
     try {
       const core = extractModelCore(await fetchWikidataEntity(m.wikidataQid, userAgent));
       const changes: string[] = [];
-      if (core.imageUrl && core.imageUrl !== m.heroImageUrl) {
-        changes.push(`hero_image_url=${core.imageUrl.slice(0, 60)}...`);
+      if (core.imageUrl && m.heroImageUrl?.startsWith("/")) {
+        // Photo already self-hosted (public/fotky/) — never overwrite it with a Commons hotlink.
+      } else if (core.imageUrl && core.imageUrl !== m.heroImageUrl) {
+        changes.push(`hero_image_url=${core.imageUrl.slice(0, 60)}... (run localize:model-photos)`);
         if (!dryRun) {
           m.heroImageUrl = core.imageUrl;
           m.updatedAt = new Date().toISOString();
