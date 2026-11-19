@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",
-    "next": "16.2.6",
+    "next": "16.4.6",
     "p-retry": "^8.0.0",
     "p-throttle": "^8.1.0",
     "postgres": "^3.4.9",
